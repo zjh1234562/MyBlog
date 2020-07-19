@@ -1,0 +1,89 @@
+{% extends "base.html" %} {% load staticfiles %}
+{% block title %} 登录 {% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3 px-xl-5">
+            <div class="card rounded-0 px-3 px-lg-4">
+                <div class="card-header text-center bg-white py-2">
+                    <h3 class="my-1 text-info">登录</h3>
+                </div>
+                <div class="card-body card-login">
+
+                    <form method="post" action=".">
+                        {% csrf_token %}
+                        <!-- 账号 -->
+                        <div class="form-group col-md-4">
+                            <label for="username">账号</label>
+                            <div class="">
+                                <input type="text" class="textinput textInput form-control" id="username" name="username" placeholder="用户名" autofocus="autofocus">
+
+                            </div>
+                        </div>
+                        <!-- 密码 -->
+                        <div class="form-group col-md-4">
+                            <label for="password">密码</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <!-- 提交按钮 -->
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </form>
+
+
+                    <br>
+                    <div>
+                        <a href='{% url "userprofile:register" %}'>注册账号</a>
+                        <a href='{% url "password_reset_recover" %}'>重置密码</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--主要内容块-->
+<!--
+<main>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3 px-xl-5">
+            <div class="card rounded-0 px-3 px-lg-4">
+                <div class="card-header text-center bg-white py-2">
+                    <h3 class="my-1 text-info">登录</h3>
+                </div>
+                <div class="card-body card-login">
+<form class="login" method="POST" action="/accounts/login/">
+    <input type="hidden" name="csrfmiddlewaretoken" value="yZ7NAcQeYOeO4ec7j1GugO7iyyig4cFmVVVjPmbnFC0MzNHHOx9lAla6ZN95KkPv">
+
+
+<div id="div_id_login" class="form-group"> <label for="id_login" class="col-form-label  requiredField">
+                账号<span class="asteriskField">*</span> </label> <div class=""> <input type="text" name="login" placeholder="用户名或e-mail" autofocus="autofocus" class="textinput textInput form-control" required id="id_login"> </div> </div> <div id="div_id_password" class="form-group"> <label for="id_password" class="col-form-label  requiredField">
+                密码<span class="asteriskField">*</span> </label> <div class=""> <input type="password" name="password" placeholder="密码" class="textinput textInput form-control" required id="id_password"> </div> </div> <div class="form-group"> <div id="div_id_remember" class="form-check"> <label for="id_remember" class="form-check-label"> <input type="checkbox" name="remember" class="checkboxinput form-check-input" id="id_remember">
+                    记住我
+                </label> </div> </div>
+
+
+    <input type="hidden" name="next" value="/"/>
+
+    <a class="secondaryAction" href="/accounts/password/reset/">忘记密码了？</a>
+    <button class="pull-right btn btn-info btn-sm rounded-0" type="submit">登录</button>
+</form>
+
+</div>
+                <div class="text-center mb-5" id="social-login">
+                    <div class="login-title">
+                        <span>快速登录</span>
+                    </div>
+                    <div class="login-link">
+
+                        <a class="mx-4" href="/accounts/weibo/login/?next=/" title="社交账号登录有点慢，请耐心等候！"><i class="fa fa-weibo fa-2x"></i></a>
+                        <a class="mx-4" href="/accounts/github/login/?next=/" title="社交账号登录有点慢，请耐心等候！"><i class="fa fa-github fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>-->
+{% endblock content %}

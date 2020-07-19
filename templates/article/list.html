@@ -1,0 +1,304 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    首页
+{% endblock title %}
+
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- 定义放置文章标题的div容器 -->
+<div id="demo" class="carousel slide" data-ride="carousel">
+      <!-- 指示符 -->
+      <ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+        <li data-target="#demo" data-slide-to="2"></li>
+      </ul>
+
+      <!-- 轮播图片 -->
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
+          <div class="carousel-caption">
+            <h3>第一张图片描述标题</h3>
+            <p>描述文字!</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://static.runoob.com/images/mix/img_nature_wide.jpg">
+          <div class="carousel-caption">
+            <h3>第二张图片描述标题</h3>
+            <p>描述文字!</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+          <div class="carousel-caption">
+            <h3>第三张图片描述标题</h3>
+            <p>描述文字!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 左右切换按钮 -->
+      <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </a>
+      <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </a>
+</div>
+
+
+
+
+<br/>
+<div class="text-secondary font-weight-bold py-2 f-15 choice">
+
+
+                <a class="pb-2 active" href="{% url 'article:article_list' %}?search={{ search }}&column={{ column }}&tag={{ tag }}">
+                    <i class="fa fa-bars mr-1"></i>最新</a>
+                <a class="pb-2 ml-4 " href="{% url 'article:article_list' %}?order=total_views&search={{ search }}&column={{ column }}&tag={{ tag }}">
+                    <i class="fa fa-fire mr-1"></i>最热</a>
+</div>
+
+<div class="container" >
+    <!--<div class="row">
+        <div class="col-auto mr-auto">
+            <form class="form-inline" >
+                <label class="sr-only">content</label>
+                <input type="text"
+                    class="form-control mb-2 mr-sm-2"
+                    name="search"
+                    placeholder="搜索文章..."
+                    required
+                >
+            </form>
+        </div>
+    </div>-->
+    <!-- 搜索提示语 -->
+   <!-- {% if search %}
+        {% if articles %}
+            <h4><span style="color: red">"{{ search }}"</span>的搜索结果如下：</h4>
+            <hr>
+        {% else %}
+            <h4>暂无<span style="color: red">"{{ search }}"</span>有关的文章。</h4>
+            <hr>
+        {% endif %}
+    {% endif %}-->
+
+    <!-- 列表循环 -->
+
+    <div class="row mt-3">
+        {% for article in articles %}
+            <!-- 文章内容 -->
+
+            {% if article.avatar %}
+                <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
+                    <img src="{{ article.avatar.url }}"
+                         alt="avatar"
+                         style="max-width:100%; border-radius: 20px"
+                    >
+                </div>
+            {% else %}
+                <div class="align-self-center mr-2 mr-lg-3 w-25 modal-open">
+                    <img src=/media/defalt-img/default-blog-img.jpg
+                         alt="avatar"
+                         style="max-width:100%; border-radius: 20px"
+                    >
+                </div>
+
+            {% endif %}
+
+            <div class="col">
+                <!-- 栏目 -->
+                {% if article.column %}
+                    <a  role="button"
+                        href="{% url 'article:article_list' %}?column={{ article.column.id }}"
+                        class="btn btn-sm mb-2
+                            {% if article.column.title == 'Django' %}
+                                btn-success
+                            {% elif article.column.title == 'Java' %}
+                                btn-danger
+                            {% elif article.column.title == 'HTML' %}
+                                btn-warning
+                            {% endif %}
+                        "
+                    >
+                        {{ article.column }}
+                    </a>
+                {% endif %}
+
+
+                <!-- 标题 -->
+                <h4>
+                    <b>
+                        <a href="{% url 'article:article_detail' article.id %}"
+                           style="color: black;"
+                        >
+                            {{ article.title }}
+                        </a>
+                        <span>
+                            {% for tag in article.tags.all %}
+                                <a href="{% url 'article:article_list' %}?tag={{ tag }}"
+                                   class="badge badge-secondary"
+                                >
+                                    {{ tag }}
+                                </a>
+                            {% endfor %}
+                        </span>
+                    </b>
+                </h4>
+
+                <!-- 摘要 -->
+                <div>
+                    <p style="color: gray;">
+                        {{ article.body|slice:'100' }}...
+                    </p>
+                </div>
+                <!-- 注脚 -->
+                <p>
+                    <!-- 附加信息，增加了图标 -->
+                    <span>
+                        <i class="fas fa-eye" style="color: lightskyblue;"></i>
+                        {{ article.total_views }}&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span>
+                        <i class="fas fa-comments" style="color: yellowgreen;"></i>
+                        <!-- 修改为评论的计数 -->
+                        {{ article.comments.count }}&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span>
+                        <i class="fas fa-clock" style="color: pink;"></i>
+                        {{ article.created|date:'Y-m-d' }}
+                    </span>
+                </p>
+                <hr>
+            </div>
+            <hr style="width:100%;"/>
+        {% endfor %}
+    </div>
+
+    <!-- 页码导航 -->
+    <div class="pagination row">
+        <div class="m-auto">
+            <span class="step-links">
+                <!-- 如果不是第一页，则显示上翻按钮 -->
+                {% if articles.has_previous %}
+                    <a href="?page=1&order={{ order }}&search={{ search }}&column={{ column }}&tag={{ tag }}" class="btn btn-success">
+                        &laquo; 1
+                    </a>
+                    <span>...</span>
+                    <a href="?page={{ articles.previous_page_number }}&order={{ order }}&search={{ search }}&column={{ column }}&tag={{ tag }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ articles.previous_page_number }}
+                    </a>
+                {% endif %}
+
+                <!-- 当前页面 -->
+                <span class="current btn btn-danger btn-lg">
+                    {{ articles.number }}
+                </span>
+
+                <!-- 如果不是最末页，则显示下翻按钮 -->
+                {% if articles.has_next %}
+                    <a href="?page={{ articles.next_page_number }}&order={{ order }}&search={{ search }}&column={{ column }}&tag={{ tag }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ articles.next_page_number }}
+                    </a>
+                    <span>...</span>
+                    <a href="?page={{ articles.paginator.num_pages }}&order={{ order }}&search={{ search }}&column={{ column }}&tag={{ tag }}"
+                       class="btn btn-success"
+                    >
+                        {{ articles.paginator.num_pages }} &raquo;
+                    </a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+</div>
+
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 rounded-0 px-3 mb-2 mb-md-3 d-none d-lg-block" >
+                <div class="card-header bg-white px-0">
+                    <strong><i class="fa fa-book mr-2 f-17"></i>关于博主</strong>
+                </div>
+                <div class="card-body px-0 pt-3 pb-1" >
+
+                      <p>这是一个可视化布局模板, 你可以点击模板里的文字进行修改, 也可以通过点击弹出的编辑框进行富文本修改. 拖动区块能实现排序.
+                      这是一个可视化布局模板, 你可以点击模板里的文字进行修改, 也可以通过点击弹出的编辑框进行富文本修改. 拖动区块能</p>
+                      <p><a class="btn btn-primary btn-large" href="#">参看更多 »</a></p>
+                </div>
+            </div>
+            <!--个人空间-->
+<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3 d-none d-lg-block" id="home-card">
+    <div class="card-header bg-white px-0">
+        <strong><i class="fa fa-paper-plane mr-2 f-17"></i>个人空间</strong>
+    </div>
+    <div class="card-body px-0 pt-3 pb-1">
+        <div class="row text-center">
+            <div class="col">
+                <a href="https://github.com/zjh1234562" target="_blank" title="进入博主的Github">
+                    <img style="max-width:40px" alt="博主的github" src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+                    <p class="mt-2">Github</p>
+                </a>
+            </div>
+            <div class="col">
+                <a href="#" target="_blank" title="查看网站建站历程">
+                    <img style="max-width:40px" alt="网站的建站历程" src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+                    <p class="mt-2">Timeline</p>
+                </a>
+            </div>
+            <div class="col">
+                <a href="#" target="_blank" title="订阅博客">
+                    <img style="max-width:40px" alt="订阅博客RSS" src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+                    <p class="mt-2">RSS订阅</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            <!--文章分类-->
+<div class="card border-0 rounded-0 px-3 mb-2 mb-md-3" id="category-card">
+    <div class="card-header bg-white px-0">
+        <strong><i class="fa fa-book mr-2 f-17"></i>文章分类</strong>
+    </div>
+
+    <ul class="list-group list-group-flush f-16">
+        {% for i in column%}
+             <li class="list-group-item d-flex justify-content-between align-items-center pr-2 py-2">
+                <a class="category-item" href="#"
+                   title="查看【CI/CD】分类下所有文章">CI/CD</a>
+                <span class="badge text-center" title="当前分类下有6篇文章">6</span>
+            </li>
+        {% endfor %}
+
+
+
+
+
+
+
+    </ul>
+</div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
